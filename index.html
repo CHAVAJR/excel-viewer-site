@@ -16,18 +16,25 @@
  <p><em>Loading default Excel file...</em></p>
   <div id="output"></div>
 
-  <script>
-  async function loadDefaultExcel() {
-    const response = await fetch('https://raw.githubusercontent.com/CHAVAJR/excel-viewer-site/main/RIVERS.SAMPLING.SCHEDULE (2).xlsx');
-    const arrayBuffer = await response.arrayBuffer();
-    const data = new Uint8Array(arrayBuffer);
-    const workbook = XLSX.read(data, { type: 'array' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const html = XLSX.utils.sheet_to_html(sheet);
-    document.getElementById('output').innerHTML = html;
+ <script>
+async function loadLiveSheet() {
+  const res = await fetch('https://docs.google.com/spreadsheets/d/e/YOUR_LINK/pub?output=csv');
+  const text = await res.text();
+  const rows = text.trim().split('\n').map(r => r.split(','));
+  
+  let html = "<table><thead><tr>";
+  rows[0].forEach(cell => html += `<th>${cell}</th>`);
+  html += "</tr></thead><tbody>";
+  for (let i = 1; i < rows.length; i++) {
+    html += "<tr>";
+    rows[i].forEach(cell => html += `<td>${cell}</td>`);
+    html += "</tr>";
   }
+  html += "</tbody></table>";
+  document.getElementById('output').innerHTML = html;
+}
 
-  loadDefaultExcel();
+loadLiveSheet();
 </script>
 </body>
 </html>
