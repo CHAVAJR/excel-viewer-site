@@ -18,7 +18,7 @@
 
   <script>
   async function loadDefaultExcel() {
-    const response = await fetch('https://raw.githubusercontent.com/CHAVAJR/excel-viewer-site/main/tasks.xlsx');
+    const response = await fetch('https://raw.githubusercontent.com/CHAVAJR/excel-viewer-site/main/RIVERS.SAMPLING.SCHEDULE (2).xlsx');
     const arrayBuffer = await response.arrayBuffer();
     const data = new Uint8Array(arrayBuffer);
     const workbook = XLSX.read(data, { type: 'array' });
