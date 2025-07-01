@@ -1,27 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Live Excel Viewer - SharePoint</title>
+  <meta charset="utf-8">
+  <title>Excel Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
-    iframe {
-      border: none;
-      width: 100vw;
-      height: 100vh;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f0f0f0; }
   </style>
 </head>
 <body>
-  <iframe 
-    src="https://onesappi-my.sharepoint.com/:x:/g/personal/siyabonga_chavangwane_sappi_com/EZ5Ne5ipiRFPv5_sym2kG-QBWQSZSy3alc9HaPyYKA75mA?embed=true" 
-    allowfullscreen>
-  </iframe>
+  <h2>Upload Excel File to View Data</h2>
+  <input type="file" id="upload" accept=".xlsx, .xls">
+  <div id="output"></div>
+
+  <script>
+    document.getElementById('upload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const html = XLSX.utils.sheet_to_html(sheet);
+        document.getElementById('output').innerHTML = html;
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  </script>
 </body>
 </html>
 
