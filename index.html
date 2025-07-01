@@ -29,6 +29,8 @@ async function loadLiveSheet() {
     html += "<tr>";
     rows[i].forEach(cell => html += `<td>${cell}</td>`);
     html += "</tr>";
+    setInterval(loadLiveSheet, 60000); // refresh every 60 seconds
+
   }
   html += "</tbody></table>";
   document.getElementById('output').innerHTML = html;
