@@ -18,7 +18,7 @@
 
  <script>
 async function loadLiveSheet() {
-  const res = await fetch('https://onesappi-my.sharepoint.com/:x:/r/personal/siyabonga_chavangwane_sappi_com/Documents/MAIN%20LAB/RIVERS%20SAMPLING%20SCHEDULE.xlsx?d=w987b4d9e89a94f11bf9fecca6da41be4&csf=1&web=1&e=qT6OXd');
+  const res = await fetch('https://docs.google.com/spreadsheets/d/e/YOUR_LINK/pub?output=csv');
   const text = await res.text();
   const rows = text.trim().split('\n').map(r => r.split(','));
   
