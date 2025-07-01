@@ -16,9 +16,9 @@
  <p><em>Loading default Excel file...</em></p>
   <div id="output"></div>
 
- <script>
-async function loadLiveSheet() {
-  const res = await fetch('https://docs.google.com/spreadsheets/d/e/YOUR_LINK/pub?output=csv');
+<script>
+async function loadSharePointCSV() {
+  const res = await fetch('https://onedrive.live.com/download.aspx?resid=ABC123XYZ!123&authkey=!SomeKey&format=csv');
   const text = await res.text();
   const rows = text.trim().split('\n').map(r => r.split(','));
   
@@ -29,14 +29,12 @@ async function loadLiveSheet() {
     html += "<tr>";
     rows[i].forEach(cell => html += `<td>${cell}</td>`);
     html += "</tr>";
-    setInterval(loadLiveSheet, 60000); // refresh every 60 seconds
-
   }
   html += "</tbody></table>";
   document.getElementById('output').innerHTML = html;
 }
 
-loadLiveSheet();
+loadSharePointCSV();
 </script>
 </body>
 </html>
