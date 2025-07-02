@@ -42,34 +42,25 @@
   <h2>Fallback: Default Excel File from GitHub</h2>
   <div id="output">Loading GitHub Excel...</div>
 
-  <script>
-    // === 1. Inject SharePoint iframe dynamically ===
-    const iframe = document.createElement('iframe');
-    iframe.src = "https://onesappi-my.sharepoint.com/:x:/g/personal/siyabonga_chavangwane_sappi_com/EZ5Ne5ipiRFPv5_sym2kG-QBWQSZSy3alc9HaPyYKA75mA?embed=true";
-    iframe.frameBorder = "0";
-    iframe.allowFullscreen = true;
-    iframe.style.width = "100%";
-    iframe.style.height = "600px";
-    document.getElementById('sharepoint-frame').innerHTML = ''; // clear loading text
-    document.getElementById('sharepoint-frame').appendChild(iframe);
+ <script>
+async function loadSharePointExcel() {
+  try {
+    const response = await fetch('https://onesappi-my.sharepoint.com/personal/siyabonga_chavangwane_sappi_com/Documents/RIVERS.xlsx?download=1
+'); // <== replace this
+    const arrayBuffer = await response.arrayBuffer();
+    const data = new Uint8Array(arrayBuffer);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const html = XLSX.utils.sheet_to_html(sheet);
+    document.getElementById('output').innerHTML = html;
+  } catch (error) {
+    document.getElementById('output').innerHTML = "<p style='color:red;'>Unable to fetch Excel file from SharePoint.</p>";
+    console.error(error);
+  }
+}
 
-    // === 2. Load fallback Excel from GitHub ===
-    async function loadDefaultExcel() {
-      try {
-        const response = await fetch('https://raw.githubusercontent.com/CHAVAJR/excel-viewer-site/main/RIVERS.SAMPLING.SCHEDULE%20(2).xlsx');
-        const arrayBuffer = await response.arrayBuffer();
-        const data = new Uint8Array(arrayBuffer);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const html = XLSX.utils.sheet_to_html(sheet);
-        document.getElementById('output').innerHTML = html;
-      } catch (error) {
-        document.getElementById('output').innerHTML = "<p style='color:red;'>Error loading Excel file from GitHub.</p>";
-      }
-    }
-
-    loadDefaultExcel();
-  </script>
+loadSharePointExcel();
+</script>
 
 </body>
 </html>
