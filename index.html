@@ -1,27 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Live Excel Viewer</title>
+  <meta charset="utf-8">
+  <title>Excel Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f8f9fa;
-    }
-    h2 {
-      color: #333;
-    }
-    iframe {
-      width: 100%;
-      height: 700px;
-      border: 1px solid #ccc;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f0f0f0; }
   </style>
 </head>
 <body>
-  <h2>Live Excel Viewer (SharePoint)</h2>
- <iframe src="https://onesappi-my.sharepoint.com/:x:/g/personal/siyabonga_chavangwane_sappi_com/EZ5Ne5ipiRFPv5_sym2kG-QBWQSZSy3alc9HaPyYKA75mA" style="border:0px #ffffff none;" name="myiFrame" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="400px" width="600px" allowfullscreen></iframe>
+  <h2>Upload Excel File to View Data</h2>
+  <p><em>Loading default Excel file...</em></p>
+  <div id="output"></div>
+
+  <script>
+  async function loadDefaultExcel() {
+    const response = await fetch('https://raw.githubusercontent.com/CHAVAJR/excel-viewer-site/main/RIVERS.SAMPLING.SCHEDULE (2).xlsx');
+    const arrayBuffer = await response.arrayBuffer();
+    const data = new Uint8Array(arrayBuffer);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const html = XLSX.utils.sheet_to_html(sheet);
+    document.getElementById('output').innerHTML = html;
+  }
+
+  loadDefaultExcel();
+</script>
 </body>
 </html>
-
