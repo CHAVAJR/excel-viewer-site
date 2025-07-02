@@ -1,39 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Live Excel Viewer (Dynamic Embed)</title>
+  <meta charset="UTF-8" />
+  <title>Live Excel Data from OneDrive</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f8f9fa;
-    }
-    h2 {
-      color: #333;
-      margin-top: 40px;
-    }
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: 1px solid #ccc;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f8f9fa; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #eee; }
   </style>
 </head>
+<body>
+
+  <h2>Live Excel Data (OneDrive)</h2>
+  <div id="output">Loading Excel data...</div>
+
+  <script>
+    async function loadExcel() {
+      try {
+        const url = "https://onedrive.live.com/download?cid=0f4e036e86a1bc30&resid=0F4E036E86A1BC30%21Ed6ZQ1ju57lMi_9oSPbLPQoBYcMrOJMUNge4H7YSj0PVHw&authkey=&em=2";
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network response not ok");
+        const data = new Uint8Array(await response.arrayBuffer());
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const html = XLSX.utils.sheet_to_html(sheet);
+        document.getElementById("output").innerHTML = html;
+      } catch (err) {
+        document.getElementById("output").innerHTML = "<p style='color:red;'>Failed to load Excel file.</p>";
+        console.error(err);
+      }
+    }
+
+    loadExcel();
+  </script>
+
+</body>
+</html>
+
 <body>
 
   <h2>Live Excel from SharePoint (Loaded via Script)</h2>
